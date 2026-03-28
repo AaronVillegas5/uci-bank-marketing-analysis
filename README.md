@@ -1,208 +1,154 @@
-📊 Predicting Marketing Success
+# 📊 Predicting Marketing Success
+**By Aaron Villegas**
 
-By Aaron Villegas
+---
 
-🔍 Overview
-
-This project builds machine learning models to predict whether a customer will subscribe to a term deposit using the UCI Bank Marketing dataset (40,000+ observations).
+## 🔍 Overview
+This project predicts whether a customer will subscribe to a term deposit using the **UCI Bank Marketing Dataset** (40,000+ observations).
 
 Two models were developed and compared:
 
-Logistic Regression
+- **Logistic Regression** – interpretable, baseline model  
+- **Random Forest Classifier** – robust, non-linear model
 
-Random Forest Classifier
+**Performance Highlights:**
 
-Both models achieved similar performance:
+- Accuracy: ~83–85%  
+- Recall: ~0.62  
 
-Accuracy: ~83–85%
+> **Hybrid approach:** Use Random Forest for prediction and Logistic Regression for interpretability and actionable insights.
 
-Recall: ~0.62
+---
 
-While the Random Forest slightly improved precision, Logistic Regression provided stronger interpretability. A combined approach leverages both models: using Random Forest for prediction and Logistic Regression for insight.
+## 🎯 Problem Statement
+Banks spend significant resources on marketing campaigns. Goals of this project:
 
-🎯 Problem Statement
+1. Identify customers likely to subscribe  
+2. Reduce wasted marketing effort  
+3. Improve targeting efficiency  
 
-Banks invest significant resources into marketing campaigns. The goal of this project is to:
+This is a **binary classification problem with class imbalance**—predicting subscribers (“yes”) is challenging but more valuable.
 
-Identify customers likely to subscribe to a term deposit
+---
 
-Reduce wasted marketing effort
+## 📁 Dataset
+- **Source:** UCI Bank Marketing Dataset  
+- **Size:** 40,000+ rows  
+- **Target Variable:** `y` (subscription: yes/no)  
+- **Features:**  
+  - **Demographics:** age, job, education  
+  - **Financial status:** loans, default  
+  - **Campaign info:** previous contact, number of contacts  
+  - **Macroeconomic indicators:**  
+    - Employment variation rate  
+    - Euribor interest rate  
+    - Consumer price index  
+    - Consumer confidence index  
 
-Improve targeting efficiency
+---
 
-This is a binary classification problem with class imbalance, where predicting subscribers ("yes") is more challenging but more valuable.
-
-📁 Dataset
-
-Source: UCI Bank Marketing Dataset
-
-Size: 40,000+ rows
-
-Target Variable: y (subscription: yes/no)
-
-Features include:
-
-Demographics (age, job, education)
-
-Financial status (loans, default)
-
-Campaign data (previous contact, number of contacts)
-
-Macroeconomic indicators:
-
-Employment variation rate
-
-Euribor interest rate
-
-Consumer price index
-
-Consumer confidence index
-
-🧹 Data Preprocessing
-
+## 🧹 Data Preprocessing
 Key steps:
 
-Handled "unknown" values as meaningful categories
+- Treated `"unknown"` values as meaningful categories  
+- Created `never_contacted` feature from `pdays`  
+- Replaced `pdays = 999` with `0`  
+- Dropped `duration` to prevent data leakage  
+- One-hot encoded categorical variables  
+- Scaled features for Logistic Regression  
 
-Created never_contacted feature from pdays
+---
 
-Replaced pdays = 999 with 0
+## 📊 Exploratory Data Analysis (EDA)
+- Strong class imbalance (~12% positive class)  
+- Correlations among economic indicators → potential multicollinearity  
+- Several features moderately correlated with target  
 
-Dropped duration to prevent data leakage
+---
 
-One-hot encoded categorical variables
+## 🤖 Models
 
-Scaled features for Logistic Regression
+### 1️⃣ Logistic Regression
+- Baseline model  
+- StandardScaler via pipeline  
+- `class_weight='balanced'` to handle imbalance  
+- **Pros:** Interpretable coefficients, easy to explain to stakeholders  
 
-📊 Exploratory Data Analysis (EDA)
+### 2️⃣ Random Forest Classifier
+- Handles non-linear relationships  
+- Robust to multicollinearity  
+- Tuned via GridSearchCV: `n_estimators`, `max_depth`, `min_samples_leaf`, `max_features`, `class_weight`  
+- **Pros:** Higher predictive performance  
 
-Strong class imbalance (~12% positive class)
+---
 
-Correlation observed among economic indicators → potential multicollinearity
+## 📈 Model Performance
 
-Several features showed moderate correlation with the target
+| Model                          | Accuracy | Precision | Recall | ROC AUC | F1 Score |
+|--------------------------------|---------|-----------|--------|--------|----------|
+| Logistic Regression             | 0.83    | 0.34      | 0.62   | 0.74   | 0.44     |
+| Cross-Validated Logistic Reg.   | 0.83    | 0.36      | 0.63   | 0.79   | 0.46     |
+| Random Forest (CV)              | 0.85    | 0.39      | 0.62   | 0.80   | 0.48     |
 
-🤖 Models
-1. Logistic Regression
+**Precision–Recall Tradeoff:**  
+- Recall is prioritized → missing a potential subscriber is costly  
+- Threshold tuning balances marketing cost vs. effectiveness  
 
-Used as a baseline model
+---
 
-Applied StandardScaler via pipeline
+## 🔑 Key Insights
+**Most Important Features:**
 
-Used class_weight='balanced' to address class imbalance
+- `euribor3m` (interest rates)  
+- `emp.var.rate` (employment variability)  
+- `nr.employed`  
+- `cons.conf.idx`  
+- `cons.price.idx`  
+- Previous contact history  
 
-Why Logistic Regression?
+**Business Interpretation:**
 
-Interpretable coefficients
+- High interest rates → more attractive term deposits  
+- Stable employment → less demand for fixed investments  
+- High inflation → impacts perceived value of deposits  
+- Customers previously contacted → higher conversion likelihood  
 
-Easy to explain to stakeholders
+---
 
-2. Random Forest Classifier
+## 💡 Final Recommendation
+**Hybrid approach:**  
 
-Handles non-linear relationships
+- **Random Forest** → predictions  
+- **Logistic Regression** → interpretability  
 
-More robust to multicollinearity
+**Benefits:**  
 
-Tuned using GridSearchCV
+- Strong predictive performance  
+- Actionable business insights  
 
-Key hyperparameters tuned:
+---
 
-n_estimators
+## 🚀 Future Improvements
+- Try advanced models (XGBoost, LightGBM)  
+- Apply SMOTE or other resampling techniques  
+- Feature selection to reduce multicollinearity  
+- Deploy as an API or interactive dashboard  
+- Incorporate time-based validation  
 
-max_depth
+---
 
-min_samples_leaf
+## 🛠️ Tech Stack
+- Python, Pandas, NumPy  
+- Scikit-learn  
+- Matplotlib, Seaborn  
 
-max_features
+---
 
-class_weight
+## 📌 Conclusion
+This project demonstrates how machine learning can:  
 
-📈 Model Performance
-Model	Accuracy	Precision	Recall	ROC AUC	F1 Score
-Logistic Regression	0.83	0.34	0.62	0.74	0.44
-Cross-Validated Logistic Regression	0.83	0.36	0.63	0.79	0.46
-Random Forest (CV)	0.85	0.39	0.62	0.80	0.48
-⚖️ Precision–Recall Tradeoff
+- Improve marketing efficiency  
+- Reduce costs  
+- Provide interpretable insights  
 
-Recall is prioritized → missing a potential subscriber is costly
-
-Threshold tuning used to:
-
-Increase precision when needed
-
-Balance marketing cost vs effectiveness
-
-🔑 Key Insights
-Most Important Features:
-
-euribor3m (interest rates)
-
-emp.var.rate (employment variability)
-
-nr.employed
-
-cons.conf.idx
-
-cons.price.idx
-
-previous contact history
-
-Business Interpretation:
-
-High interest rates → more attractive term deposits
-
-Stable employment → less demand for fixed investments
-
-High inflation → impacts perceived value of deposits
-
-Previously contacted customers are more likely to convert
-
-💡 Final Recommendation
-
-Instead of choosing one model:
-
-👉 Use both models together
-
-Random Forest → make predictions
-
-Logistic Regression → explain decisions
-
-This hybrid approach provides:
-
-Strong predictive performance
-
-Actionable business insights
-
-🚀 Future Improvements
-
-Try advanced models (XGBoost, LightGBM)
-
-Use SMOTE or resampling techniques
-
-Perform feature selection to reduce multicollinearity
-
-Deploy model as an API or dashboard
-
-Incorporate time-based validation
-
-🛠️ Tech Stack
-
-Python
-
-Pandas, NumPy
-
-Scikit-learn
-
-Matplotlib, Seaborn
-
-📌 Conclusion
-
-This project demonstrates how machine learning can:
-
-Improve marketing efficiency
-
-Reduce costs
-
-Provide interpretable insights
-
-By combining predictive power with interpretability, businesses can make smarter, data-driven decisions.
+> Combining predictive power with interpretability allows businesses to make smarter, data-driven decisions.
